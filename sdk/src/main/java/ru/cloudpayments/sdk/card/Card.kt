@@ -34,32 +34,25 @@ class Card {
 				false
 			} else {
 				val number = prepareCardNumber(cardNumber)
-				return if (TextUtils.isEmpty(number) || number.length < 14) {
+				return if (TextUtils.isEmpty(number) || number.length < 16) {
 					false
 				} else {
-					var sum = 0
-					if (number.length % 2 == 0) {
-						for (i in number.indices step 2) {
-							var c = number.substring(i, i + 1).toInt()
-							c *= 2
-							if (c > 9) {
-								c -= 9
-							}
-							sum += c
-							sum += number.substring(i + 1, i + 2).toInt()
+
+					var nCheck = 0
+					var nDigit = 0
+					var bEven = false
+
+
+					for (i in number.length - 1 downTo 0) {
+						nDigit = java.lang.String.valueOf(number.get(i)).toInt()
+						if (bEven) {
+							if (2.let { nDigit *= it; nDigit } > 9) nDigit -= 9
 						}
-					} else {
-						for (i in 1 until number.length step 2) {
-							var c: Int = number.substring(i, i + 1).toInt()
-							c *= 2
-							if (c > 9) {
-								c -= 9
-							}
-							sum += c
-							sum += number.substring(i - 1, i).toInt()
-						}
+						nCheck += nDigit
+						bEven = !bEven
 					}
-					sum % 10 == 0
+
+					return nCheck % 10 == 0
 				}
 			}
 		}
